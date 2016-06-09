@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Marko</string>
+    <string name="app_nameList">Bluetooth</string>
+    <string name="action_settings">Settings</string>
+    <string name="textIspis"> </string>
+    <string name="connect_btn">Connect</string>
+    <string name="txtDevices">Discovered Devices</string>
+    <string name="disconnect_btn">Disconnect</string>
+</resources>
