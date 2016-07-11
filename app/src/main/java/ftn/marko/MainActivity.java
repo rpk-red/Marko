@@ -3,7 +3,10 @@ package ftn.marko;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -199,6 +202,32 @@ public class MainActivity extends AppCompatActivity {
         textView5 = (TextView)findViewById(R.id.textView5);
         connectBtn = (Button) findViewById(R.id.btnConnect);
         bitmap = BitmapFactory.decodeResource(getResources(), R.mipmap.ball);
+        BroadcastReceiver mReceiver = new BroadcastReceiver() {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                String action = intent.getAction();
+                if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
+
+                } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
+
+
+                } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
+                    if (MainActivity.adapterBT.getState() == MainActivity.adapterBT.STATE_OFF) {
+                        turnOnBT();
+                        if(connectionFlag){
+                            connected.cancel();
+                            connect.cancel();
+                            connectionFlag = false;
+                            connectBtn.setText(R.string.connect_btn);
+                            selectedDevice = null;
+                        }
+
+                    }
+                }
+            }
+        };
+        IntentFilter mFilter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(mReceiver, mFilter);
 
     }
 
@@ -218,6 +247,7 @@ public class MainActivity extends AppCompatActivity {
     private void turnOnBT() {
         Intent enableIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(enableIntent, REQUEST_ENABLE_BT);
+
     }
 
     @Override

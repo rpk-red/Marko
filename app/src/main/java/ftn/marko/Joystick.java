@@ -27,7 +27,6 @@ public class Joystick {
     public static final int STICK_DOWNLEFT = 6;
     public static final int STICK_LEFT = 7;
     public static final int STICK_UPLEFT = 8;
-    protected static final String LOG_TAG = "MainActivity";
 
     private int STICK_ALPHA = 200;
     private int LAYOUT_ALPHA = 200;
@@ -187,68 +186,59 @@ public class Joystick {
         }
         return 0;
     }
+
     public void calculate8(){
-        if(distance > min_distance && touch_state) {
-            if(angle > 0 && angle < 45 ) {
-                motorD = (angle-45)/45;
-                motorL = 1;
-            } else if(angle >= 45 && angle < 90 ) {
-                motorD = (angle-45)/45;
-                motorL = 1;
-            } else if(angle >= 90 && angle < 135 ) {
-                motorD = 1;
-                motorL = (135-angle)/45;
-            } else if(angle >= 135 && angle < 180 ) {
-                motorD = 1;
-                motorL = (135-angle)/45;
-            } else if(angle >= 180 && angle < 225 ) {
-                motorD = -1;
-                motorL = (225-angle)/45;
-            } else if(angle >= 225 && angle < 270 ) {
-                motorD = -1;
-                motorL = (225-angle)/45;
-            } else if(angle >= 270 && angle < 315 ) {
-                motorD = (angle-315)/45;
-                motorL = -1;
-            } else if(angle >= 315 && angle < 360 ) {
-                motorD = (angle-315)/45;
-                motorL = -1;
-            } else{
-                motorL=motorD = 0;
-            }
-
-
-            DecimalFormat decimalFormat = new DecimalFormat();
-            DecimalFormatSymbols dfs = new DecimalFormatSymbols();
-            dfs.setDecimalSeparator('.');
-            decimalFormat.setDecimalFormatSymbols(dfs);
-            decimalFormat.setMaximumFractionDigits(2);
-            motorL = Double.parseDouble(decimalFormat.format(motorL));
-            motorD = Double.parseDouble(decimalFormat.format(motorD));
-            porukaMotori = new double[]{motorL, motorD};
-
-
-
-
-        }
-    }
-    public void calculate4(){
-        motorD = motorL = 0;
-        if(angle <= 180){
-
-            motorD = angle /180;
-            motorL = (180-angle)/180;
-        }
-        else{
-            angle -=180;
-            motorD = -(180-angle)/180;
-            motorL = -(angle)/180;
-        }
-
-        motorD *= getDistance();
-        motorL *= getDistance();
+	if(distance > min_distance && touch_state){
+        float mDistance = getDistance()/125;
+			/* PRVI KVADRANT */
+		if(angle >= 0 && angle < 90){
+			motorL = mDistance;
+			motorD = -Math.cos(Math.toRadians(2*(double)angle))*mDistance;
+        	}
+			/* DRUGI KVADRANT */
+		if(angle >= 90 && angle < 180){
+			motorL = -Math.cos(Math.toRadians(2*(double)angle))*mDistance;
+			motorD = mDistance;
+		}
+			/* TRECI KVADRANT */
+		if(angle >= 180 && angle < 270){
+			motorL = -mDistance;
+			motorD = Math.cos(Math.toRadians(2*(double)angle))*mDistance;
+		}
+			/* CETVRTI KVADRANT */
+		if(angle >= 270 && angle < 360){
+			motorL = Math.cos(Math.toRadians(2*(double)angle))*mDistance;
+			motorD = -mDistance;
+		}
+   	 }
+        DecimalFormat decimalFormat = new DecimalFormat();
+        DecimalFormatSymbols dfs = new DecimalFormatSymbols();
+        dfs.setDecimalSeparator('.');
+        decimalFormat.setDecimalFormatSymbols(dfs);
+        decimalFormat.setMaximumFractionDigits(2);
+        motorL = Double.parseDouble(decimalFormat.format(motorL));
+        motorD = Double.parseDouble(decimalFormat.format(motorD));
+        porukaMotori = new double[]{motorL, motorD};
 
     }
+
+//    public void calculate4(){
+//        motorD = motorL = 0;
+//        if(angle <= 180){
+//
+//            motorD = angle /180;
+//            motorL = (180-angle)/180;
+//        }
+//        else{
+//            angle -=180;
+//            motorD = -(180-angle)/180;
+//            motorL = -(angle)/180;
+//        }
+//
+//        motorD *= getDistance();
+//        motorL *= getDistance();
+//
+//    }
 
     public void setOffset(int offset) {
         OFFSET = offset;

@@ -26,7 +26,6 @@ import java.util.Set;
 public class DeviceList extends AppCompatActivity implements AdapterView.OnItemClickListener {
 
     private static final int REQUEST_ENABLE_PAIRING = 2;
-    private static final String LOG_TAG = "MainActivity";
     private static final int SUCCESS_CONNECTED = 0;
     private ListView listView;
     private ArrayAdapter<String> listAdapter;
@@ -69,8 +68,20 @@ public class DeviceList extends AppCompatActivity implements AdapterView.OnItemC
                             break;
                         }
                     }
+//                    if(listAdapter.getCount() == 0) {
+//                        listAdapter.add(device.getName() + " " + s + " " + "\n" + device.getAddress());
+//                        devices.add(device);
+//                    }
+//                        for (int i = 1; i < listAdapter.getCount(); i++) {
+//                            if (listAdapter.getItem(i) == (device.getName() + " " + s + " " + "\n" + device.getAddress())) {
+//                                break;
+//                            }
+//                            listAdapter.add(device.getName() + " " + s + " " + "\n" + device.getAddress());
+//                            devices.add(device);
+//                        }
                     listAdapter.add(device.getName() + " " + s + " " + "\n" + device.getAddress());
                     devices.add(device);
+
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_STARTED.equals(action)) {
 
                 } else if (BluetoothAdapter.ACTION_DISCOVERY_FINISHED.equals(action)) {
@@ -78,9 +89,8 @@ public class DeviceList extends AppCompatActivity implements AdapterView.OnItemC
 
                 } else if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                     if (MainActivity.adapterBT.getState() == MainActivity.adapterBT.STATE_OFF) {
-                        Toast.makeText(DeviceList.this, "Your bluetooth is disabled, you have to enable it!",
-                                Toast.LENGTH_SHORT).show();
-                        finish();
+                       finish();
+
                     }
                 }
             }
@@ -140,7 +150,7 @@ public class DeviceList extends AppCompatActivity implements AdapterView.OnItemC
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
 
-        Log.d(LOG_TAG, "Kliknut");
+        Log.d(MainActivity.LOG_TAG, "Kliknut");
 //        if (MainActivity.adapterBT.isDiscovering()) {
 //            MainActivity.adapterBT.cancelDiscovery();
 //        }
